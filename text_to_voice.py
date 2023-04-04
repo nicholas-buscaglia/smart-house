@@ -1,5 +1,3 @@
-# pip3 install pyttsx3
-
 import pyttsx3
 
 # 11 (hawking)
@@ -38,3 +36,4 @@ def speak(something):
     # Fred (hawking)
     # Karen
     # Alex
+
