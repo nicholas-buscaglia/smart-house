@@ -1,17 +1,22 @@
 import wakeword
+import whisper
+import voice_to_text
+import text_to_voice
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
+def voice_assist():
 
-def wake_up():
-    # Use a breakpoint in the code line below to debug your script.
     while True:
+
         wakeword.jarvis()
+        text_to_voice.speak("Greetings human...how may I assist you?")
+
+        prompt = voice_to_text.get_prompt_string()
+        if prompt != '':
+            print(f'You:\n{prompt}')
+            response = whisper.chat(prompt)
+            text_to_voice.speak(response)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    wake_up()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    voice_assist()
