@@ -3,7 +3,6 @@ import pyaudio
 import asyncio
 import base64
 import json
-import sys
 import os
 auth_key = os.getenv("ASSEMBLYAI_API_KEY")
 
@@ -17,6 +16,10 @@ def get_prompt_string():
     global kill_count
     global kill
     global result
+
+    kill_count = 0
+    kill = False
+    result = ''
 
     FRAMES_PER_BUFFER = 3200
     FORMAT = pyaudio.paInt16
@@ -36,7 +39,6 @@ def get_prompt_string():
 
     # the AssemblyAI endpoint to hit
     URL = "wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000"
-
 
     async def send_receive():
         # print(f'Connecting websocket to url ${URL}')
@@ -134,4 +136,3 @@ def get_prompt_string():
     asyncio.run(send_receive())
 
     return result
-
