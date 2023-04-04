@@ -16,4 +16,5 @@ def chat(text):
     )
     resp = response.choices[0].text.strip()
     print(resp)
+
     return resp
