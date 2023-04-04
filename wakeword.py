@@ -1,18 +1,13 @@
-import voice_to_text
-import pvporcupine
-import text_to_voice
-import whisper
+mport pvporcupine
 import pyaudio
 import struct
-import time
 import os
 access_key = os.getenv("PICO_KEY")  # AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
 
-start = 0
 
 def jarvis():
     # print(pvporcupine.KEYWORDS)
-    print('...')
+    print('listening...')
 
     porcupine = None
     pa = None
@@ -38,20 +33,6 @@ def jarvis():
 
             if keyword_index >= 0:
                 print("Hotword Detected\n")
-
-                global start
-
-                if start==0:
-
-                    text_to_voice.speak("Greetings human...how may I assis you?")
-
-                prompt = voice_to_text.get_prompt_string()
-                print(f'You:\n{prompt}')
-                response = whisper.chat(prompt)
-                text_to_voice.speak(response)
-
-                start = 1
-
                 break
 
     finally:
@@ -64,5 +45,3 @@ def jarvis():
 
         if pa is not None:
             pa.terminate()
-
-jarvis()
