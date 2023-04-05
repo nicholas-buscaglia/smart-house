@@ -135,4 +135,7 @@ def get_prompt_string():
 
     asyncio.run(send_receive())
 
+    if result != '':
+        print(f'You: {result}')
+
     return result
