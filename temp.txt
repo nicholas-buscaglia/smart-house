@@ -1,0 +1,5 @@
+export PICO_KEY=9zzgdau+yrjogHxmhvZuLN8hpGFRYFgZYKFTj4TJlVJU2B/fQBF7Qw==
+
+export ASSEMBLYAI_API_KEY=be46c7b9316b48ddbc248f82917f1fe8
+
+export OPENAI_API_KEY=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
