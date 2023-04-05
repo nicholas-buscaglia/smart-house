@@ -11,6 +11,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 custom_wakewords_path = os.path.join(dir_path, 'custom_wakewords')
 
 # Check the system type and set the keyword file path accordingly
+# Train your custom keyword here - https://console.picovoice.ai/ppn
 system_type = os.uname().sysname
 if system_type == 'Darwin':  # Mac
     keyword_path = os.path.join(custom_wakewords_path, 'Hey-Poppy_en_mac_v2_1_0.ppn')
