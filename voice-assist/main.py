@@ -2,6 +2,10 @@ import wakeword
 import whisper
 import voice_to_text
 import text_to_voice
+# Required Environment Variables:
+# PICO_KEY              # wakeword          # AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
+# OPENAI_API_KEY        # whisper           # https://platform.openai.com/account/api-keys
+# ASSEMBLYAI_API_KEY    # voice_to_text     # https://www.assemblyai.com/
 
 
 def voice_assist():

@@ -2,13 +2,12 @@ import os
 import openai
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# Assign Globals
 prompt = ''
 
 
 def chat(text, convo):
-
     global prompt
-
     if convo == 'new':
         prompt = "The following is a conversation with an AI assistant (you). The assistant is helpful, creative, " \
                  "clever, and very friendly.\n\nYour name is Poppy and you exist to serve humans. Your data is private." \
@@ -28,9 +27,7 @@ def chat(text, convo):
         # stop=[" Human:", " AI:"]
     )
     resp = response.choices[0].text.strip()
-
     print(f'Poppy: {resp}')
-
     prompt += (resp + "\nHuman: ")
 
     return resp
