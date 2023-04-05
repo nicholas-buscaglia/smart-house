@@ -2,11 +2,28 @@ import pvporcupine
 import pyaudio
 import struct
 import os
+
 access_key = os.getenv("PICO_KEY")  # AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
 
+# Get the directory path of the current Python file
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-def jarvis():
-    # print(pvporcupine.KEYWORDS)
+# Construct the full path of the custom_wakewords directory
+custom_wakewords_path = os.path.join(dir_path, 'custom_wakewords')
+
+# Check the system type and set the keyword file path accordingly
+system_type = os.uname().sysname
+if system_type == 'Darwin':  # Mac
+    keyword_path = os.path.join(custom_wakewords_path, 'Hey-Poppy_en_mac_v2_1_0.ppn')
+elif system_type == 'Linux':  # Linux
+    keyword_path = os.path.join(custom_wakewords_path, 'Hey-Poppy_en_linux_v2_1_0.ppn')
+elif system_type == 'Linux':  # Raspberry Pi
+    keyword_path = os.path.join(custom_wakewords_path, 'Hey-Poppy_en_raspberry-pi_v2_1_0.ppn')
+else:
+    raise ValueError(f"System type {system_type} not supported.")
+
+
+def poppy():
     print('listening...')
 
     porcupine = None
@@ -14,7 +31,12 @@ def jarvis():
     audio_stream = None
 
     try:
-        porcupine = pvporcupine.create(access_key=access_key, keywords=["jarvis", "grasshopper"])
+        # Available stock keywords
+        # pvporcupine.KEYWORDS = {'grapefruit', 'picovoice', 'blueberry', 'hey google', 'hey siri', 'hey barista',
+        # 'bumblebee', 'ok google', 'grasshopper', 'computer', 'americano', 'pico clock', 'alexa', 'porcupine',
+        # 'jarvis', 'terminator'}
+        # porcupine = pvporcupine.create(access_key=access_key, keywords=["jarvis", "grasshopper"])
+        porcupine = pvporcupine.create(access_key=access_key, keyword_paths=[keyword_path])
 
         pa = pyaudio.PyAudio()
 

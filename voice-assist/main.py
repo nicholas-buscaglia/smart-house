@@ -8,7 +8,7 @@ def voice_assist():
 
     while True:
 
-        wakeword.jarvis()
+        wakeword.poppy()
         text_to_voice.speak("Greetings human...how may I assist you?")
 
         prompt = voice_to_text.get_prompt_string()
