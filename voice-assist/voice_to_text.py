@@ -14,6 +14,7 @@ num_devices = info.get('deviceCount')
 for i in range(num_devices):
     device_info = p.get_device_info_by_host_api_device_index(0, i)
     if device_info['maxInputChannels'] > 0:
+        # Change for your mic!  Or comment out for default
         if 'Snowball' in device_info['name']:
             input_device_index = i
             break
