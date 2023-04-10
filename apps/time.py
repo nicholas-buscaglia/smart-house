@@ -3,7 +3,6 @@ import pytz
 import requests
 import json
 
-
 def get_current_time(location=None):
     """
     Gets the current time in the specified location or local timezone if no location is provided.
@@ -56,7 +55,3 @@ def get_current_date(location=None):
     print(f'current date: {formatted_date}')
 
     return formatted_date
-
-
-get_current_time()
-get_current_date()
