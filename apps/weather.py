@@ -2,6 +2,7 @@ import os
 import requests
 import json
 
+
 def get_local_weather():
     """
     Gets the local weather using the OpenWeatherMap API.
@@ -9,15 +10,25 @@ def get_local_weather():
     :return: A dictionary containing weather information
     """
     # Get the API key from an environment variable
-    api_key = os.environ.get('OPENWEATHERMAP_API_KEY')
+    api_key = os.environ.get('IPIFY_API_KEY')
 
     # Use the ipify API to get the user's public IP address
     response = requests.get('https://api.ipify.org?format=json')
     ip_address = response.json()['ip']
 
+    # Get the API key from an environment variable
+    api_key = os.environ.get('IPSTACK_API_KEY')
+
     # Use the ipstack API to get the user's location information
-    response = requests.get(f'http://api.ipstack.com/{ip_address}?access_key={api_key}&format=1')
+    response = requests.get(f'http://api.ipstack.com/{ip_address}?access_key={api_key}')
     location = response.json()
+
+    # Check if the latitude and longitude keys exist in the location dictionary
+    if 'latitude' not in location or 'longitude' not in location:
+        print("Unable to get location information")
+        return None
+
+    api_key = os.environ.get('OPENWEATHERMAP_API_KEY')
 
     # Use the OpenWeatherMap API to get the local weather
     response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={location["latitude"]}&lon={location["longitude"]}&appid={api_key}')
@@ -47,21 +58,6 @@ def get_local_weather():
         forecast.append(forecast_dict)
 
     weather['forecast'] = forecast
+    print(weather)
 
     return weather
-
-# Get the local weather and print it
-weather = get_local_weather()
-print(f"Location: {weather['location']}")
-print(f"Current Description: {weather['current_description']}")
-print(f"Current Temperature: {weather['current_temperature']} Kelvin")
-print(f"Current Humidity: {weather['current_humidity']}%")
-print(f"Current Wind Speed: {weather['current_wind_speed']} meters/second")
-
-print("\nForecast:")
-for forecast_item in weather['forecast']:
-    print(f"Date: {forecast_item['date']}")
-    print(f"Description: {forecast_item['description']}")
-    print(f"Temperature: {forecast_item['temperature']} Kelvin")
-    print(f"Humidity: {forecast_item['humidity']}%")
-    print(f"Wind Speed: {forecast_item['wind_speed']} meters/second")
