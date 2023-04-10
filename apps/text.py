@@ -1,36 +1,106 @@
+import email, smtplib, ssl
+from providers import PROVIDERS
 import os
-from twilio.rest import Client
+
+# used for MMS
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+from os.path import basename
 
 
-def send_text_message(from_number, to_number, message):
-    """
-    Sends a text message using Twilio API.
+def send_sms_via_email(
+    number: str,
+    message: str,
+    provider: str,
+    sender_credentials: tuple,
+    subject: str = "sent using etext",
+    smtp_server: str = "smtp.gmail.com",
+    smtp_port: int = 465,
+):
+    sender_email, email_password = sender_credentials
+    receiver_email = f'{number}@{PROVIDERS.get(provider).get("sms")}'
 
-    :param from_number: Twilio phone number to send message from
-    :param to_number: Phone number to send message to
-    :param message: Message to send
-    """
-    # Get Twilio account credentials from environment variables
-    account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
-    auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
+    email_message = f"Subject:{subject}\nTo:{receiver_email}\n{message}"
 
-    # Initialize the Twilio client
-    client = Client(account_sid, auth_token)
+    with smtplib.SMTP_SSL(
+        smtp_server, smtp_port, context=ssl.create_default_context()
+    ) as email:
+        email.login(sender_email, email_password)
+        email.sendmail(sender_email, receiver_email, email_message)
 
-    # Send the text message
-    message = client.messages.create(
-        body=message,
-        from_=from_number,
-        to=to_number
-    )
+def send_mms_via_email(
+    number: str,
+    message: str,
+    file_path: str,
+    mime_maintype: str,
+    mime_subtype: str,
+    provider: str,
+    sender_credentials: tuple,
+    subject: str = "sent using etext",
+    smtp_server: str = "smtp.gmail.com",
+    smtp_port: int = 465,
+):
 
-    # Print the message SID
-    print("Message SID:", message.sid)
+    sender_email, email_password = sender_credentials
+    receiver_email = f'{number}@{PROVIDERS.get(provider).get("sms")}'
 
-# Get the phone numbers and message from the user
-from_number = input("Enter your Twilio phone number: ")
-to_number = input("Enter the recipient's phone number: ")
-message = input("Enter the message to send: ")
+    email_message=MIMEMultipart()
+    email_message["Subject"] = subject
+    email_message["From"] = sender_email
+    email_message["To"] = receiver_email
 
-# Send the text message
-send_text_message(from_number, to_number, message)
+    email_message.attach(MIMEText(message, "plain"))
+
+    with open(file_path, "rb") as attachment:
+        part = MIMEBase(mime_maintype, mime_subtype)
+        part.set_payload(attachment.read())
+
+        encoders.encode_base64(part)
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename={basename(file_path)}",
+        )
+
+        email_message.attach(part)
+
+    text = email_message.as_string()
+
+    with smtplib.SMTP_SSL(
+        smtp_server, smtp_port, context=ssl.create_default_context()
+    ) as email:
+        email.login(sender_email, email_password)
+        email.sendmail(sender_email, receiver_email, text)
+
+
+def main():
+    number = "7163083720"
+    message = "hello world! \n\nSent from Nick's AI Assistant"
+    provider = "Verizon"
+
+    sender_credentials = (os.environ.get('SMTP_USERNAME'), os.environ.get('SMTP_PASSWORD'))
+
+    # SMS
+    send_sms_via_email(number, message, provider, sender_credentials)
+
+    # # MMS
+    # file_path = "/path/to/file/file.png"
+    #
+    # mime_maintype = "image"
+    # mime_subtype = "png"
+    #
+    # send_mms_via_email(
+    #     number,
+    #     message,
+    #     file_path,
+    #     mime_maintype,
+    #     mime_subtype,
+    #     provider,
+    #     sender_credentials,
+    # )
+
+
+if __name__ == "__main__":
+    main()
