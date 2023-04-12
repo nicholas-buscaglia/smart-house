@@ -33,8 +33,8 @@ def poppy():
         # pvporcupine.KEYWORDS = {'grapefruit', 'picovoice', 'blueberry', 'hey google', 'hey siri', 'hey barista',
         # 'bumblebee', 'ok google', 'grasshopper', 'computer', 'americano', 'pico clock', 'alexa', 'porcupine',
         # 'jarvis', 'terminator'}
-        # porcupine = pvporcupine.create(access_key=access_key, keywords=["jarvis", "grasshopper"])
-        porcupine = pvporcupine.create(access_key=access_key, keyword_paths=[keyword_path])
+        porcupine = pvporcupine.create(access_key=access_key, keywords=["computer"])
+        # porcupine = pvporcupine.create(access_key=access_key, keyword_paths=[keyword_path])
         pa = pyaudio.PyAudio()
         audio_stream = pa.open(
                         rate=porcupine.sample_rate,

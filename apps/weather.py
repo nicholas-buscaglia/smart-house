@@ -31,7 +31,7 @@ def get_local_weather():
     api_key = os.environ.get('OPENWEATHERMAP_API_KEY')
 
     # Use the OpenWeatherMap API to get the local weather
-    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={location["latitude"]}&lon={location["longitude"]}&appid={api_key}')
+    response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={location["latitude"]}&lon={location["longitude"]}&appid={api_key}&units=imperial')
     current_weather_data = response.json()
 
     # Use the OpenWeatherMap API to get the local weather forecast
@@ -58,6 +58,10 @@ def get_local_weather():
         forecast.append(forecast_dict)
 
     weather['forecast'] = forecast
-    print(weather)
+    # print(weather)
+
+    weather = f"""{weather['location']}: Currently {weather['current_description']}, 
+    the temperature is {weather['current_temperature']} degrees with {weather['current_humidity']} percent humidity and 
+    wind speeds of {weather['current_wind_speed']} miles per hour"""
 
     return weather
