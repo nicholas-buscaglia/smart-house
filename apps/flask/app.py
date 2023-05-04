@@ -3,9 +3,9 @@ from pymongo import MongoClient
 from datetime import datetime
 from enum import Enum
 import os
+mongo_url = os.environ.get('MYMONGO')
 
 app = Flask(__thoughtstream__)
-mongo_url = os.environ.get('MYMONGO')
 client = MongoClient(mongo_url)
 db = client.thoughtstream
 collection = db.thoughts
